@@ -1,0 +1,5 @@
+@import 'components/InputField/InputField.module.css';
+
+.inputGroup {
+  max-width: 350px;
+}

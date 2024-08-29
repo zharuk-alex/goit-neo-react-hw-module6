@@ -1,42 +1,35 @@
-import InputField from "components/InputField/InputField";
-import { FormikProvider, Field, useFormik } from "formik";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectNameFilter } from "store/selectors";
 import { changeFilter } from "store/filtersSlice";
-import debounce from "lodash.debounce";
+import { MdClose } from "react-icons/md";
+import styles from "./SearchBox.module.css";
 
 const SearchBox = () => {
   const nameFilter = useSelector(selectNameFilter);
   const dispatch = useDispatch();
-  const formik = useFormik({
-    initialValues: {
-      name: nameFilter,
-    },
-  });
 
-  const { values } = formik;
-  const debouncedChange = debounce(
-    () => dispatch(changeFilter(values?.["name"])),
-    500
-  );
+  const handleChange = (evt) => {
+    const { value } = evt.target;
+    dispatch(changeFilter(value));
+  };
 
-  useEffect(() => {
-    debouncedChange(values?.["name"]);
-    return () => {
-      debouncedChange.cancel();
-    };
-  }, [values?.["name"]]);
+  const handleClear = () => {
+    dispatch(changeFilter(""));
+  };
 
   return (
-    <FormikProvider value={formik}>
-      <Field
-        name="name"
+    <div className={styles.inputGroup}>
+      <input
         type="text"
-        label="Find contacts by name"
-        component={InputField}
+        className={styles.formInput}
+        value={nameFilter}
+        onChange={handleChange}
+        placeholder="Search contact"
       />
-    </FormikProvider>
+      {!!nameFilter && (
+        <MdClose className={styles.clearIcon} onClick={handleClear} />
+      )}
+    </div>
   );
 };
 
