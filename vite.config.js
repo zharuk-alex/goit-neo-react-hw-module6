@@ -5,7 +5,9 @@ import path from "path";
 export default defineConfig({
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      data: "/src/data",
+      components: "/src/components",
+      store: "/src/redux",
     },
   },
   plugins: [react()],
